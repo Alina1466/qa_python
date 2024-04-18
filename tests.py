@@ -1,14 +1,15 @@
+import pytest
 from main import BooksCollector
 
 
 class TestBooksCollector:
 
-    @pytest.mark.parametrixe('name_book', ['А', 'Алиса в стране чуда', 'Невероятная грустная история о Эренндире']
-    def test_add_new_book_add_two_books_with_different_lenght_name(self, name_book):
+    @pytest.mark.parametrize('name_book', ['А', 'Алиса в стране чуда', 'Невероятная грустная история о Эренндире'])
+    def test_add_new_book_add_one_book_with_different_lenght_name(self, name_book):
         collector = BooksCollector()
         collector.add_new_book(name_book)
         expected_result = {name_book: ''}
-        actual_result == collector.get_books_genre()
+        actual_result = collector.get_books_genre()
         assert actual_result == expected_result
 
     @pytest.mark.parametrize('name_book', ['', 'Удивительное путешествие Нильса Хольгерсона'])
@@ -28,10 +29,10 @@ class TestBooksCollector:
         result = collector.get_book_genre(name_book)
         assert result == genre_book
 
-    @pytest.mark.parametrize('name_book, genre_book', [['Фауст', 'Трагедия'],
-                                                       ['Алиса в стране чуда', 'Сказка'],
-                                                       ['Четвёртое крыло', 'Фэнтези'],
-                                                       ['Я знаю, что видел', 'Детектив'],
+    @pytest.mark.parametrize('name_book, genre_book', [['Фауст', 'Комедии'],
+                                                       ['Алиса в стране чуда', 'Мультфильмы'],
+                                                       ['Четвёртое крыло', 'Фантастика'],
+                                                       ['Я знаю, что видел', 'Детективы'],
                                                        ['Семь ликов страха', 'Ужасы']])
     def test_get_book_genre_get_right_genre_of_book_by_name_book(self, name_book, genre_book):
         collector = BooksCollector()
@@ -46,7 +47,7 @@ class TestBooksCollector:
         name_book_2 = 'Шкатулка'
         name_book_3 = 'Я знаю, что видел'
         genre_book_horror = 'Ужасы'
-        genre_book_detective = 'Детектив'
+        genre_book_detective = 'Детективы'
         collector.add_new_book(name_book_1)
         collector.set_book_genre(name_book_1, genre_book_horror)
         collector.add_new_book(name_book_2)
@@ -69,25 +70,16 @@ class TestBooksCollector:
     def test_get_books_for_children_get_books_without_rating(self):
         collector = BooksCollector()
         name_book_1 = 'Семь ликов страха'
-        name_book_2 = 'Я знаю, что видел'
+        name_book_2 = 'Четвёртое крыло'
         genre_book_horror = 'Ужасы'
-        genre_book_comedy = 'Детектив'
+        genre_book_fantasy = 'Фантастика'
         collector.add_new_book(name_book_1)
         collector.set_book_genre(name_book_1, genre_book_horror)
         collector.add_new_book(name_book_2)
-        collector.set_book_genre(name_book_2, genre_book_detective)
+        collector.set_book_genre(name_book_2, genre_book_fantasy)
         expected_result = [name_book_2]
         actual_result = collector.get_books_for_children()
         assert actual_result == expected_result
-
-    def test_add_book_in_favorites_add_book_from_books_genre(self):
-        collector = BooksCollector()
-        name_book = 'Семь ликов страха'
-        collector.add_new_book(name_book)
-        collector.add_book_in_favorites(name_book)
-        expected_result = [name_book]
-        actual_result = collector.get_list_of_favorites_books()
-        assert actual_result == expected_result and len(actual_result) == 1
 
     def test_delete_book_from_favorites_delete_one_book(self):
         collector = BooksCollector()
@@ -98,6 +90,15 @@ class TestBooksCollector:
         expected_result = []
         actual_result = collector.get_list_of_favorites_books()
         assert actual_result == expected_result and len(actual_result) == 0
+
+    def test_add_book_in_favorites_add_book_from_books_genre(self):
+        collector = BooksCollector()
+        name_book = 'Семь ликов страха'
+        collector.add_new_book(name_book)
+        collector.add_book_in_favorites(name_book)
+        expected_result = [name_book]
+        actual_result = collector.get_list_of_favorites_books()
+        assert actual_result == expected_result and len(actual_result) == 1
 
     def test_get_list_of_favorites_books_get_whole_list_books_from_favorites(self):
         collector = BooksCollector()
@@ -110,5 +111,3 @@ class TestBooksCollector:
         expected_result = [name_book_1, name_book_2]
         actual_result = collector.get_list_of_favorites_books()
         assert actual_result == expected_result and len(actual_result) == 2
-
-
